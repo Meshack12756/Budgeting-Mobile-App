@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BudgetingApp</string>
+    <string name="s_date">Start Date</string>
+    <string name="e_date">End date</string>
+    <string name="export">Export Report</string>
+    <string name="enter_amount">Enter contribution amount</string>
+
 </resources>
