@@ -50,4 +50,6 @@ dependencies {
     val lifecycle_version = "2.10.0"
     implementation("androidx.lifecycle:lifecycle-livedata:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
