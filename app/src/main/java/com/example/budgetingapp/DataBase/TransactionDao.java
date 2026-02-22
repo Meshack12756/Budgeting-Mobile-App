@@ -35,4 +35,16 @@ public interface TransactionDao {
 
     @Query("SELECT SUM(amount) FROM transactions WHERE category = :categoryName")
     double getTotalByCategory(String categoryName);
+
+    @Query("SELECT category, SUM(amount) as total FROM transactions WHERE type='expense' AND date BETWEEN :startDate AND :endDate GROUP BY category")
+    List<CategoryTotal> getExpenseTotalsByCategoryBetween(String startDate, String endDate);
+
+    @Query("SELECT strftime('%Y-%m', date) as month, SUM(amount) as total FROM transactions WHERE type='expense' AND date BETWEEN :startDate AND :endDate GROUP BY month ORDER BY month ASC")
+    List<MonthlyTotal> getMonthlyExpenseTotalsBetween(String startDate, String endDate);
+
+    @Query("SELECT date, SUM(amount) as total FROM transactions WHERE type='expense' AND date BETWEEN :startDate AND :endDate GROUP BY date ORDER BY date ASC")
+    List<DailyTotal> getDailyExpenseTotalsBetween(String startDate, String endDate);
+
+    @Query("DELETE FROM transactions")
+    void deleteAll();
 }
