@@ -4,5 +4,25 @@
     <string name="e_date">End date</string>
     <string name="export">Export Report</string>
     <string name="enter_amount">Enter contribution amount</string>
+      <string name="transactions_title">Transactions</string>
+        <string name="search_by_note">Search by note</string>
+
+       
+        <string name="filter_all">All</string>
+        <string name="filter_income">Income</string>
+        <string name="filter_expense">Expense</string>
+
+      
+        <string name="start_date">Start Date</string>
+        <string name="end_date">End Date</string>
+
+      
+        <string name="add_transaction">Add Transaction</string>
+    
+    <string name="add_edit_transaction">Add / Edit Transaction</string>
+    <string name="hint_amount">Amount</string>
+    <string name="hint_category">Category</string>
+    <string name="hint_note_optional">Note (Optional)</string>
+    <string name="save_transaction">Save Transaction</string>
 
 </resources>
