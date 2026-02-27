@@ -64,33 +64,83 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quick Actions -->
-            <LinearLayout
+            <!-- Main Quick Actions -->
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
+                android:columnCount="2"
+                android:rowCount="3"
+                android:alignmentMode="alignMargins"
+                android:columnOrderPreserved="false"
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddTransaction"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_columnWeight="1"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:text="Add Transaction"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="#1976D2"/>
+                    android:backgroundTint="#1976D2"
+                    app:icon="@android:drawable/ic_input_add"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnViewReports"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_columnWeight="1"
                     android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
                     android:text="Reports"
-                    android:layout_marginStart="8dp"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="#1565C0"/>
-            </LinearLayout>
+                    android:backgroundTint="#1565C0"
+                    app:icon="@android:drawable/ic_menu_sort_by_size"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoals"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Goals"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#43A047"
+                    app:icon="@android:drawable/btn_star"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExpense"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Expenses"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#E53935"
+                    app:icon="@android:drawable/ic_menu_myplaces"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBudget"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Budget"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#FB8C00"
+                    app:icon="@android:drawable/ic_menu_agenda"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSettings"
+                    android:layout_width="0dp"
+                    android:layout_columnWeight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Settings"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#757575"
+                    app:icon="@android:drawable/ic_menu_preferences"/>
+
+            </GridLayout>
 
             <!-- Monthly Summary -->
             <com.google.android.material.card.MaterialCardView

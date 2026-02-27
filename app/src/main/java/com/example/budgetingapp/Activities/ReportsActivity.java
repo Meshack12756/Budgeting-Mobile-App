@@ -4,10 +4,8 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.budgetingapp.Logic.*;
@@ -18,6 +16,8 @@ import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ReportsActivity extends AppCompatActivity {
@@ -44,14 +44,18 @@ public class ReportsActivity extends AppCompatActivity {
         setupDatePickers();
         setupExport();
 
-        //uncomment dao.deleteAll() for one run.
+        // Sample data insertion for testing
         new Thread(() -> {
             dao.deleteAll();
 
-             dao.insert(new Transaction("Food", 1000, "Food", "expense", "2026-02-20"));
-            dao.insert(new Transaction("Rent", 5000, "Housing", "expense", "2026-02-21"));
-            dao.insert(new Transaction("Salary", 20000, "Job", "income", "2026-02-19"));
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            try {
+                dao.insert(new Transaction(1000, "expense", "Food", "Food", sdf.parse("2026-02-20").getTime()));
+                dao.insert(new Transaction(5000, "expense", "Housing", "Rent", sdf.parse("2026-02-21").getTime()));
+                dao.insert(new Transaction(20000, "income", "Job", "Salary", sdf.parse("2026-02-19").getTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             runOnUiThread(this::reloadCharts);
         }).start();
@@ -142,15 +146,13 @@ public class ReportsActivity extends AppCompatActivity {
 
                 LineDataSet ds = new LineDataSet(entries, "Daily Spending");
 
-                
                 ds.setDrawFilled(false);      
-                ds.setDrawCircles(true);       // ADD dots on the line
-                ds.setCircleRadius(5f);        // Make dots visible
-                ds.setLineWidth(3f);           // Make the line thicker
-                ds.setColor(Color.BLUE);       // Solid blue line
+                ds.setDrawCircles(true);
+                ds.setCircleRadius(5f);
+                ds.setLineWidth(3f);
+                ds.setColor(Color.BLUE);
                 ds.setCircleColor(Color.BLUE);
-                ds.setDrawValues(true);        // Show the number above the dot
-      
+                ds.setDrawValues(true);
 
                 lineChart.setData(new LineData(ds));
                 lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));

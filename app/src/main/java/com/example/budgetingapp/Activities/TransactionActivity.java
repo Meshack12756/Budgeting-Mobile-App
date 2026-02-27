@@ -1,6 +1,5 @@
 package com.example.budgetingapp.Activities;
 
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +7,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
+
+import com.example.budgetingapp.Adapters.TransactionAdapter;
+import com.example.budgetingapp.DataBase.TransactionViewModel;
+import com.example.budgetingapp.DataBase.Transaction;
+import com.example.budgetingapp.R;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;

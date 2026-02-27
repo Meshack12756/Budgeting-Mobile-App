@@ -1,4 +1,4 @@
-package com.example.budgetingapp;
+package com.example.budgetingapp.DataBase;
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -47,3 +47,4 @@ public class TransactionViewModel extends AndroidViewModel {
     public void delete(Transaction transaction) {
         repository.delete(transaction);
     }
+}

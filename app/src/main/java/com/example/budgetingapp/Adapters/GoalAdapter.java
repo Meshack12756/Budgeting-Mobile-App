@@ -14,12 +14,13 @@ import com.example.budgetingapp.DataBase.Goal;
 import com.example.budgetingapp.R;
 
 import java.util.List;
+import java.util.Locale;
 
 public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder> {
 
     private List<Goal> goalList;
-    private OnGoalClickListener clickListener;
-    private OnContributeClickListener contributeListener;
+    private final OnGoalClickListener clickListener;
+    private final OnContributeClickListener contributeListener;
 
     public interface OnGoalClickListener {
         void onGoalClick(Goal goal);
@@ -49,13 +50,17 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         Goal goal = goalList.get(position);
 
         holder.tvGoalName.setText(goal.getGoalName());
-        holder.tvTargetAmount.setText(String.format("Target: KES %.2f", goal.getTargetAmount()));
-        holder.tvCurrentAmount.setText(String.format("Saved: KES %.2f", goal.getCurrentAmount()));
-        holder.tvDeadline.setText("Due: " + goal.getDeadline());
+        holder.tvTargetAmount.setText(String.format(Locale.getDefault(), "Target: KES %.2f", goal.getTargetAmount()));
+        holder.tvCurrentAmount.setText(String.format(Locale.getDefault(), "Saved: KES %.2f", goal.getCurrentAmount()));
+        holder.tvDeadline.setText(String.format("Due: %s", goal.getDeadline()));
 
-        int progress = (int) ((goal.getCurrentAmount() / goal.getTargetAmount()) * 100);
+        int progress = 0;
+        if (goal.getTargetAmount() > 0) {
+            progress = (int) ((goal.getCurrentAmount() / goal.getTargetAmount()) * 100);
+        }
+        
         holder.progressBar.setProgress(Math.min(progress, 100));
-        holder.tvProgress.setText(progress + "%");
+        holder.tvProgress.setText(String.format(Locale.getDefault(), "%d%%", progress));
 
         holder.itemView.setOnClickListener(v -> clickListener.onGoalClick(goal));
         holder.btnContribute.setOnClickListener(v -> contributeListener.onContributeClick(goal));
@@ -63,7 +68,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
 
     @Override
     public int getItemCount() {
-        return goalList.size();
+        return goalList == null ? 0 : goalList.size();
     }
 
     public void updateGoals(List<Goal> newGoalList) {
@@ -71,7 +76,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.GoalViewHolder
         notifyDataSetChanged();
     }
 
-    static class GoalViewHolder extends RecyclerView.ViewHolder {
+    public static class GoalViewHolder extends RecyclerView.ViewHolder {
         TextView tvGoalName, tvTargetAmount, tvCurrentAmount, tvDeadline, tvProgress;
         ProgressBar progressBar;
         Button btnContribute;
