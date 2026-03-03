@@ -7,6 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.text.NumberFormat;
 import java.util.*;
+import com.example.budgetingapp.DataBase.Transaction;
+import com.example.budgetingapp.R;
+
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
 

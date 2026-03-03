@@ -4,8 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
     <LinearLayout
@@ -14,66 +15,99 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvGoalName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Goal Name"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#2196F3"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvGoalName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="New Car"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#212121" />
+
+            <TextView
+                android:id="@+id/tvProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45%"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#2196F3" />
+        </LinearLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="8dp"
-            android:layout_marginBottom="4dp"
-            android:max="100"
-            android:progress="0" />
+            android:layout_marginVertical="12dp"
+            android:progressDrawable="@drawable/goal_progress_drawable" />
 
-        <TextView
-            android:id="@+id/tvProgress"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="0%"
-            android:textSize="12sp"
-            android:gravity="end"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvCurrentAmount"
+            <TextView
+                android:id="@+id/tvCurrentAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saved: KES 45,000"
+                android:textSize="14sp"
+                android:textColor="#4CAF50" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTargetAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Target: KES 100,000"
+                android:textSize="14sp"
+                android:textColor="#757575" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginVertical="12dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Saved: KES 0"
-            android:textSize="14sp"
-            android:textColor="#4CAF50" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvTargetAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Target: KES 0"
-            android:textSize="14sp"
-            android:layout_marginBottom="4dp" />
+            <TextView
+                android:id="@+id/tvDeadline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Due: 2026-12-31"
+                android:textSize="12sp"
+                android:textColor="#9E9E9E" />
 
-        <TextView
-            android:id="@+id/tvDeadline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Due: 31/12/2025"
-            android:textSize="12sp"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnContribute"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Contribute"
-            android:textSize="12sp"
-            android:padding="8dp" />
+            <Button
+                android:id="@+id/btnContribute"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:minHeight="0dp"
+                android:text="Add Money"
+                android:textAllCaps="false"
+                android:textColor="#2196F3"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

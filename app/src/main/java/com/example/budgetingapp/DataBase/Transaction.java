@@ -1,5 +1,4 @@
 package com.example.budgetingapp.DataBase;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,17 +8,17 @@ public class Transaction {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
-    public String title;
     public double amount;
+    public String type;
     public String category;
-    public String type; // is it income or expense
-    public String date;
+    public String note;
+    public long date;
 
-    public Transaction(String title, double amount, String category, String type, String date) {
-        this.title = title;
+    public Transaction(double amount, String type, String category, String note, long date) {
         this.amount = amount;
-        this.category = category;
         this.type = type;
+        this.category = category;
+        this.note = note;
         this.date = date;
     }
 }

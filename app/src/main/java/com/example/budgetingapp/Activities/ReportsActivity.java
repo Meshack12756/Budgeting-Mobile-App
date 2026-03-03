@@ -4,10 +4,8 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.budgetingapp.Logic.*;
@@ -18,6 +16,7 @@ import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ReportsActivity extends AppCompatActivity {
@@ -27,8 +26,8 @@ public class ReportsActivity extends AppCompatActivity {
     private LineChart lineChart;
     private TransactionDao dao;
 
-    private String startDate = "2026-01-01";
-    private String endDate = "2026-12-31";
+    private String startDate;
+    private String endDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,21 +39,29 @@ public class ReportsActivity extends AppCompatActivity {
         barChart = findViewById(R.id.barChart);
         lineChart = findViewById(R.id.lineChart);
 
+        setupDefaultDates();
         setupTabs();
         setupDatePickers();
         setupExport();
+    }
 
-        //uncomment dao.deleteAll() for one run.
-        new Thread(() -> {
-            dao.deleteAll();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reloadCharts();
+    }
 
-             dao.insert(new Transaction("Food", 1000, "Food", "expense", "2026-02-20"));
-            dao.insert(new Transaction("Rent", 5000, "Housing", "expense", "2026-02-21"));
-            dao.insert(new Transaction("Salary", 20000, "Job", "income", "2026-02-19"));
-
-
-            runOnUiThread(this::reloadCharts);
-        }).start();
+    private void setupDefaultDates() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        
+        // Default to current year
+        cal.set(Calendar.DAY_OF_YEAR, 1);
+        startDate = sdf.format(cal.getTime());
+        
+        cal.set(Calendar.MONTH, 11);
+        cal.set(Calendar.DAY_OF_MONTH, 31);
+        endDate = sdf.format(cal.getTime());
     }
 
     private void setupTabs() {
@@ -86,14 +93,18 @@ public class ReportsActivity extends AppCompatActivity {
         new Thread(() -> {
             List<CategoryTotal> list = dao.getExpenseTotalsByCategoryBetween(startDate, endDate);
             runOnUiThread(() -> {
-                if (list == null || list.isEmpty()) { pieChart.clear(); return; }
+                if (list == null || list.isEmpty()) { 
+                    pieChart.clear(); 
+                    return; 
+                }
                 ArrayList<PieEntry> entries = new ArrayList<>();
                 for (CategoryTotal ct : list)
                     entries.add(new PieEntry((float) ct.total, ct.category));
 
-                PieDataSet ds = new PieDataSet(entries, "");
+                PieDataSet ds = new PieDataSet(entries, "Expenses by Category");
                 ds.setColors(com.github.mikephil.charting.utils.ColorTemplate.MATERIAL_COLORS);
                 ds.setValueTextSize(12f);
+                ds.setValueTextColor(Color.BLACK);
 
                 pieChart.setData(new PieData(ds));
                 ReportsChartHelper.stylePieChart(pieChart);
@@ -106,7 +117,10 @@ public class ReportsActivity extends AppCompatActivity {
         new Thread(() -> {
             List<MonthlyTotal> list = dao.getMonthlyExpenseTotalsBetween(startDate, endDate);
             runOnUiThread(() -> {
-                if (list == null || list.isEmpty()) { barChart.clear(); return; }
+                if (list == null || list.isEmpty()) { 
+                    barChart.clear(); 
+                    return; 
+                }
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList<String> labels = new ArrayList<>();
 
@@ -130,7 +144,10 @@ public class ReportsActivity extends AppCompatActivity {
         new Thread(() -> {
             List<DailyTotal> list = dao.getDailyExpenseTotalsBetween(startDate, endDate);
             runOnUiThread(() -> {
-                if (list == null || list.isEmpty()) { lineChart.clear(); return; }
+                if (list == null || list.isEmpty()) { 
+                    lineChart.clear(); 
+                    return; 
+                }
 
                 ArrayList<Entry> entries = new ArrayList<>();
                 ArrayList<String> labels = new ArrayList<>();
@@ -141,16 +158,13 @@ public class ReportsActivity extends AppCompatActivity {
                 }
 
                 LineDataSet ds = new LineDataSet(entries, "Daily Spending");
-
-                
                 ds.setDrawFilled(false);      
-                ds.setDrawCircles(true);       // ADD dots on the line
-                ds.setCircleRadius(5f);        // Make dots visible
-                ds.setLineWidth(3f);           // Make the line thicker
-                ds.setColor(Color.BLUE);       // Solid blue line
+                ds.setDrawCircles(true);
+                ds.setCircleRadius(5f);
+                ds.setLineWidth(3f);
+                ds.setColor(Color.BLUE);
                 ds.setCircleColor(Color.BLUE);
-                ds.setDrawValues(true);        // Show the number above the dot
-      
+                ds.setDrawValues(true);
 
                 lineChart.setData(new LineData(ds));
                 lineChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));

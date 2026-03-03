@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BudgetingApp</string>
+    <string name="app_name">Pesa Hub</string>
 
     <string name="s_date">Start Date</string>
     <string name="e_date">End Date</string>
