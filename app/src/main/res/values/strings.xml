@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BudgetingApp</string>
+    <string name="app_name">PesaHub</string>
     <string name="s_date">Start Date</string>
     <string name="e_date">End date</string>
     <string name="export">Export Report</string>
