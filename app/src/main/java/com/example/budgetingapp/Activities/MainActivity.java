@@ -6,35 +6,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.budgetingapp.R;
-import com.example.budgetingapp.DataBase.AppDatabase;
 import com.example.budgetingapp.DataBase.Transaction;
 import com.example.budgetingapp.Adapters.TransactionAdapter;
+import com.example.budgetingapp.DataBase.TransactionViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity implements TransactionAdapter.OnItemLongClick {
 
     private TextView tvTotalBalance, tvMonthlyIncome, tvMonthlyExpense;
     private TransactionAdapter transactionAdapter;
-    private AppDatabase db;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private TransactionViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        db = AppDatabase.getInstance(this);
 
         tvTotalBalance = findViewById(R.id.tvTotalBalance);
         tvMonthlyIncome = findViewById(R.id.tvMonthlyIncome);
@@ -53,65 +48,33 @@ public class MainActivity extends AppCompatActivity implements TransactionAdapte
         transactionAdapter = new TransactionAdapter(new ArrayList<>(), this);
         recyclerRecent.setAdapter(transactionAdapter);
 
-        fabAdd.setOnClickListener(v ->
-                startActivity(new Intent(this, TransactionActivity.class))
-        );
+        viewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
-        btnAddTransaction.setOnClickListener(v ->
-                startActivity(new Intent(this, TransactionActivity.class))
-        );
+        // Observe reactive data
+        viewModel.getTotalBalance().observe(this, balance -> 
+                tvTotalBalance.setText(String.format(Locale.getDefault(), "KES %.2f", balance != null ? balance : 0.0)));
 
-        btnViewReports.setOnClickListener(v ->
-                startActivity(new Intent(this, ReportsActivity.class))
-        );
+        viewModel.getMonthlyIncome().observe(this, income -> 
+                tvMonthlyIncome.setText(String.format(Locale.getDefault(), "Income: KES %.2f", income != null ? income : 0.0)));
 
-        btnGoals.setOnClickListener(v ->
-                startActivity(new Intent(this, GoalsActivity.class))
-        );
+        viewModel.getMonthlyExpense().observe(this, expense -> 
+                tvMonthlyExpense.setText(String.format(Locale.getDefault(), "Expense: KES %.2f", expense != null ? expense : 0.0)));
 
-        btnExpense.setOnClickListener(v ->
-                startActivity(new Intent(this, ExpenseActivity.class))
-        );
+        viewModel.getAllTransactions().observe(this, transactions -> 
+                transactionAdapter.setList(transactions));
 
-        btnBudget.setOnClickListener(v ->
-                startActivity(new Intent(this, BudgetActivity.class))
-        );
-
-        btnSettings.setOnClickListener(v ->
-                startActivity(new Intent(this, SettingsActivity.class))
-        );
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadDashboardData();
-    }
-
-    private void loadDashboardData() {
-        executor.execute(() -> {
-            double totalBalance = db.transactionDao().getTotalBalance();
-            double monthlyIncome = db.transactionDao().getMonthlyIncome();
-            double monthlyExpense = db.transactionDao().getMonthlyExpense();
-            List<Transaction> recentTransactions = db.transactionDao().getAllTransactions();
-
-            runOnUiThread(() -> {
-                tvTotalBalance.setText(String.format(Locale.getDefault(), "KES %.2f", totalBalance));
-                tvMonthlyIncome.setText(String.format(Locale.getDefault(), "Income: KES %.2f", monthlyIncome));
-                tvMonthlyExpense.setText(String.format(Locale.getDefault(), "Expense: KES %.2f", monthlyExpense));
-                transactionAdapter.setList(recentTransactions);
-            });
-        });
+        // Navigation
+        fabAdd.setOnClickListener(v -> startActivity(new Intent(this, TransactionActivity.class)));
+        btnAddTransaction.setOnClickListener(v -> startActivity(new Intent(this, TransactionActivity.class)));
+        btnViewReports.setOnClickListener(v -> startActivity(new Intent(this, ReportsActivity.class)));
+        btnGoals.setOnClickListener(v -> startActivity(new Intent(this, GoalsActivity.class)));
+        btnExpense.setOnClickListener(v -> startActivity(new Intent(this, ExpenseActivity.class)));
+        btnBudget.setOnClickListener(v -> startActivity(new Intent(this, BudgetActivity.class)));
+        btnSettings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
     }
 
     @Override
     public void onLongClick(Transaction transaction) {
         Toast.makeText(this, "Transaction: " + transaction.category, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        executor.shutdown();
     }
 }
